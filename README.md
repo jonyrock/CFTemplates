@@ -1,4 +1,6 @@
 CFTemplates
 ===========
 
-Codeforces code snippets 
+Personal code snippets
+
+* Solution.cs - basic template
