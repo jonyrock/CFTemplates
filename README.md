@@ -1,0 +1,4 @@
+CFTemplates
+===========
+
+Codeforces code snippets 
