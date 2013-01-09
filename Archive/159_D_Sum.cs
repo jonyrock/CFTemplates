@@ -1,5 +1,5 @@
 ﻿// http://codeforces.ru/contest/257/problem/D
-﻿﻿﻿using System;
+using System;
 ﻿﻿﻿using System.Collections.Generic;
 ﻿﻿﻿using System.IO;
 ﻿﻿﻿using System.Linq;
@@ -7,6 +7,9 @@
 
 namespace CF {
     class Program {
+
+        static int N;
+        static int M;
 
         static void Main(string[] args) {
 
@@ -17,11 +20,33 @@ namespace CF {
 			TextReader reader = Console.In;
             TextWriter writer = Console.Out;
 #endif
-
             var n = reader.Read<int>();
-            var a = reader.ReadArr<int>()
-                .SelectIndexes().ToArray();
+            var a = reader.ReadArr<int>();
 
+            var signMap = new Stack<bool>();
+
+            var rightSum = a[n-1];
+            var i = n - 2;
+            while (i >= 0) {
+                rightSum = rightSum - a[i];
+                if (rightSum < 0) {
+                    signMap.Push(false);
+                    rightSum = -rightSum;
+                } else
+                    signMap.Push(true);
+                i--;
+            }
+            var invert = false;
+            while (signMap.Any()) {
+                var val = signMap.Pop();
+                var wasInvert = invert;
+                if (!val)
+                    invert = !invert;
+                if (wasInvert) val = !val;
+                Console.Write(val ? "-" : "+");
+            }
+
+            Console.Write(invert ? "-" : "+");
 
 #if DEBUG
             Console.ReadKey();
@@ -50,8 +75,8 @@ namespace CF {
             var builder = new StringBuilder();
             while (true) {
                 val = reader.Read();
-                if (val == ' ' || val == -1) {
-                    if (builder.Length == 0) continue;
+                if (val == ' ' || val == -1){ 
+                    if(builder.Length == 0) continue;
                     break;
                 }
                 if (val == 13) {
@@ -75,12 +100,6 @@ namespace CF {
                 ).ToArray();
         }
 
-    }
-
-    static class LinqExtensions {
-        public static IEnumerable<Pair<T, int>> SelectIndexes<T>(this IEnumerable<T> collection) {
-            return collection.Select((v, i) => new Pair<T, int>(v, i));
-        }
     }
 
 }
