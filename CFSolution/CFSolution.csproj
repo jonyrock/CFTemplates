@@ -44,9 +44,6 @@
     <Compile Include="Solution.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="input.txt" />
   </ItemGroup>
   <ItemGroup>
