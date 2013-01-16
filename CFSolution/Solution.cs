@@ -18,9 +18,18 @@ namespace CF {
 #endif
 
             var n = reader.Read<int>();
+            var k = reader.Read<int>();
             var a = reader.ReadArr<int>()
-                .SelectIndexes().ToArray();
+                .SelectIndexes()
+                .ToArray();
 
+            if (n % 2 == 0) goto AnswStep;
+            
+            a = a.OrderBy(p => p.First).ToArray();
+
+            
+AnswStep:
+            Console.WriteLine(a.SelectValues().Sum());
 
 #if DEBUG
             Console.ReadKey();
@@ -77,8 +86,12 @@ namespace CF {
     }
 
     static class LinqExtensions {
+        /// <summary>Value / Index</summary>
         public static IEnumerable<Pair<T, int>> SelectIndexes<T>(this IEnumerable<T> collection) {
             return collection.Select((v, i) => new Pair<T, int>(v, i));
+        }
+        public static IEnumerable<T> SelectValues<T>(this IEnumerable<Pair<T, int>> collection) {
+            return collection.Select(p => p.First);
         }
     }
 
