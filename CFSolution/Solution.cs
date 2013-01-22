@@ -1,13 +1,17 @@
-﻿﻿﻿﻿using System;
+﻿﻿﻿﻿﻿using System;
 ﻿﻿﻿using System.Collections.Generic;
-﻿﻿﻿using System.IO;
+﻿﻿﻿﻿using System.Globalization;
+﻿﻿﻿﻿using System.IO;
 ﻿﻿﻿using System.Linq;
 ﻿﻿﻿using System.Text;
+﻿﻿﻿﻿using System.Threading;
 
 namespace CF {
     class Program {
 
         static void Main(string[] args) {
+
+            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
 
 #if DEBUG
             TextReader reader = new StreamReader("../../input.txt");
@@ -17,19 +21,11 @@ namespace CF {
             TextWriter writer = Console.Out;
 #endif
 
+            
             var n = reader.Read<int>();
-            var k = reader.Read<int>();
-            var a = reader.ReadArr<int>()
-                .SelectIndexes()
-                .ToArray();
 
-            if (n % 2 == 0) goto AnswStep;
-            
-            a = a.OrderBy(p => p.First).ToArray();
 
             
-AnswStep:
-            Console.WriteLine(a.SelectValues().Sum());
 
 #if DEBUG
             Console.ReadKey();
@@ -39,6 +35,7 @@ AnswStep:
     }
 
 
+    #region template
     class Pair<T1, T2> {
         public Pair(T1 first, T2 second) {
             First = first;
@@ -49,6 +46,7 @@ AnswStep:
         public override string ToString() {
             return "{" + First + " " + Second + "}";
         }
+        
     }
 
     static class ReaderExtensions {
@@ -93,7 +91,18 @@ AnswStep:
         public static IEnumerable<T> SelectValues<T>(this IEnumerable<Pair<T, int>> collection) {
             return collection.Select(p => p.First);
         }
+        public static void AddRepeatedRange<T, V>(this IDictionary<T, ICollection<V>> dictionary, 
+            Func<ICollection<V>> generator, IEnumerable<Pair<T,V>> sourceCollection ) {
+            foreach (var pair in sourceCollection) {
+                if (!dictionary.ContainsKey(pair.First)) {
+                    dictionary[pair.First] = generator();
+                }
+                dictionary[pair.First].Add(pair.Second);
+            }
+        }
+        public static T Second<T>(this IEnumerable<T> collection) {
+            return collection.Skip(1).First();
+        }
     }
-
+    #endregion 
 }
-
