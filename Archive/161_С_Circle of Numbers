@@ -1,0 +1,177 @@
+/// http://codeforces.ru/contest/263/problem/C
+using System;
+﻿﻿﻿using System.Collections.Generic;
+﻿﻿﻿using System.IO;
+﻿﻿﻿using System.Linq;
+﻿﻿﻿using System.Text;
+
+namespace CF {
+    class Program {
+
+        static Dictionary<int, List<int>> Friends;
+        static List<int> Solution;
+        static HashSet<int> Prevs;
+        static int N;
+
+        static void Main(string[] args) {
+
+#if DEBUG
+            TextReader reader = new StreamReader("../../input.txt");
+            TextWriter writer = Console.Out;
+#else
+  		TextReader reader = Console.In;
+            TextWriter writer = Console.Out;
+#endif
+
+            N = reader.Read<int>();
+
+            Friends = new Dictionary<int, List<int>>();
+
+            for (var i = 0; i < 2 * N; i++) {
+                var a = reader.Read<int>();
+                var b = reader.Read<int>();
+                if (!Friends.ContainsKey(a)) Friends[a] = new List<int>();
+                if (!Friends.ContainsKey(b)) Friends[b] = new List<int>();
+                Friends[a].Add(b);
+                Friends[b].Add(a);
+            }
+
+            if (!Friends.ContainsKey(1)) goto ERR;
+            if (Friends[1].Count() < 4) goto ERR;
+
+            if (N == 5) {
+                Console.WriteLine("1 2 3 4 5");
+                return;
+            }
+
+            var firstFriends = Friends[1].ToArray();
+            for (int i = 0; i < 4; i++)
+                for (int j = 0; j < 4; j++) {
+                    Prevs = new HashSet<int> { 1, firstFriends[j] };
+                    if (IsFriends(firstFriends[j], firstFriends[i]) && 
+                        TryBuild(firstFriends[i])) goto ANSW;
+                }
+                
+
+        ERR:
+            Console.WriteLine("-1");
+            return;
+        ANSW:
+            
+            foreach (var ss in Solution) {
+                Console.Write(ss + " ");
+            }
+
+
+#if DEBUG
+            Console.ReadKey();
+#endif
+        }
+
+        static bool IsFriends(int p, int q) {
+            if (Friends[p].Count() < 4) return false;
+            return Friends[p][0] == q ||
+                Friends[p][1] == q ||
+                Friends[p][2] == q ||
+                Friends[p][3] == q;
+        }
+
+        static bool TryBuild(int g) {
+            var prev = Prevs.Last();
+            Solution = new List<int> { prev, 1, g };
+            Prevs.Add(g);
+            
+            var next = 0;
+            int p = 1;
+            while (Solution.Count() < N){
+                next = FindNext(p, g);
+                if (next == -1) return false;
+                Solution.Add(next);
+                Prevs.Add(next);
+                p = g;
+                g = next;
+            }
+
+
+            return IsFriends(prev, Solution[Solution.Count() - 1]) && 
+                IsFriends(1, Solution[Solution.Count() - 1]);
+        }
+
+        static int FindNext(int p, int g) {
+            if (Friends[p].Count() != 4) return -1;
+            if (Friends[g].Count() != 4) return -1;
+            int next = Friends[p][0];
+            if (!Prevs.Contains(next) && IsFriends(p, g)) return next;
+
+            next = Friends[p][1];
+            if (!Prevs.Contains(next) && IsFriends(p, g)) return next;
+
+            next = Friends[p][2];
+            if (!Prevs.Contains(next) && IsFriends(p, g)) return next;
+
+            next = Friends[p][3];
+            if (!Prevs.Contains(next) && IsFriends(p, g)) return next;
+
+            return -1;
+        }
+
+    }
+
+
+    class Pair<T1, T2> {
+        public Pair(T1 first, T2 second) {
+            First = first;
+            Second = second;
+        }
+        public T1 First { get; set; }
+        public T2 Second { get; set; }
+        public override string ToString() {
+            return "{" + First + " " + Second + "}";
+        }
+    }
+
+    static class ReaderExtensions {
+
+        public static string ReadToken(this TextReader reader) {
+            int val;
+            var builder = new StringBuilder();
+            while (true) {
+                val = reader.Read();
+                if (val == ' ' || val == -1) {
+                    if (builder.Length == 0) continue;
+                    break;
+                }
+                if (val == 13) {
+                    reader.Read();
+                    if (builder.Length == 0) continue;
+                    break;
+                }
+                builder.Append((char)val);
+            }
+            return builder.ToString();
+        }
+
+        public static T Read<T>(this TextReader reader) {
+            return (T)Convert.ChangeType(reader.ReadToken(), typeof(T));
+        }
+
+        public static T[] ReadArr<T>(this TextReader reader) {
+            return reader.ReadLine()
+                .Split(' ').Select(str =>
+                    (T)Convert.ChangeType(str, typeof(T))
+                ).ToArray();
+        }
+
+    }
+
+    static class LinqExtensions {
+        /// <summary>Value / Index</summary>
+        public static IEnumerable<Pair<T, int>> SelectIndexes<T>(this IEnumerable<T> collection) {
+            return collection.Select((v, i) => new Pair<T, int>(v, i));
+        }
+        public static IEnumerable<T> SelectValues<T>(this IEnumerable<Pair<T, int>> collection) {
+            return collection.Select(p => p.First);
+        }
+    }
+
+}
