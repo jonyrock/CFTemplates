@@ -7,7 +7,12 @@
 ﻿﻿﻿﻿using System.Threading;
 
 namespace CF {
+
+    
+
     class Program {
+
+        static HashSet<int> possibleAngles; 
 
         static void Main(string[] args) {
 
@@ -21,16 +26,34 @@ namespace CF {
             TextWriter writer = Console.Out;
 #endif
 
-            
+            possibleAngles = new HashSet<int>();
             var n = reader.Read<int>();
 
+            for (int i = 2; i < 180; i++) {
+                if((180 % i) == 0){
+                    var outAngl = 180 - (180 / i);
+                    if ((360 % outAngl) == 0)
+                        possibleAngles.Add(180 / i);
+                }
+            }
 
+            for (int i = 0; i < n; i++) {
+                var a = reader.Read<int>();
+                if(possibleAngles.Contains(a)){
+                    Console.WriteLine("YES");
+                }
+                else {
+                    Console.WriteLine("NO");
+                }
+            }
             
 
 #if DEBUG
             Console.ReadKey();
 #endif
         }
+
+        
 
     }
 
@@ -104,5 +127,16 @@ namespace CF {
             return collection.Skip(1).First();
         }
     }
+
+    static class OutputExtensions {
+        public static void WriteBySeparatorLine<T>(this IEnumerable<T> list, string sep = " ") {
+            foreach (var v in list) {
+                Console.Write(v);
+                Console.Write(sep);
+            }
+            Console.WriteLine();
+        }
+    }
+
     #endregion 
 }

@@ -1,0 +1,9 @@
+input
+3
+30
+60
+90
+output
+NO
+YES
+YES
