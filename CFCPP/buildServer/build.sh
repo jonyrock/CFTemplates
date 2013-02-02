@@ -1,5 +1,9 @@
 #!/bin/bash
-cd "C:\codeforces\CFCPP"
+
+work_dir="$(pwd)"
+TESTS_FILE_NAME="tests.txt"
+cd ..
+
 if [ -e "a.exe" ] 
 then 
 	rm "a.exe"	
@@ -11,14 +15,15 @@ if [ -e "a.exe" ]
 then
 	for (( i=1; ; i++ ))
 	do
-		input="$(./testEnum.exe input.txt i $i)"
+		
+		input="$($work_dir/testEnum.exe $TESTS_FILE_NAME i $i)"
 		if [[ $? != 0 ]]
 		then
 			break
 		fi
 		echo ""
 		echo "----TEST $i----"
-		./testEnum.exe input.txt i $i
+		$work_dir/testEnum.exe "$TESTS_FILE_NAME" i $i
 	
 		echo ""
 		echo "OUT"
@@ -27,7 +32,8 @@ then
 		echo ""
 		echo ""
 		echo "ANSW"
-		./testEnum.exe input.txt o $i
+		$work_dir/testEnum.exe "$TESTS_FILE_NAME" o $i
 		echo ""
 	done
 fi
+cd "$work_dir"

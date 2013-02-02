@@ -9,6 +9,7 @@ class SilentRequestHandler(http.server.SimpleHTTPRequestHandler):
     
 
 PORT = int(sys.argv[1])
+print (PORT)
 Handler = SilentRequestHandler
 httpd = socketserver.TCPServer(("", PORT), Handler)
 httpd.handle_request()
