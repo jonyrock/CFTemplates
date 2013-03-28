@@ -14,6 +14,7 @@
 #define REP(i, to) for(__typeof(to) i = 0; i < to; i++)
 #define DOWNTO(i, to) for(int i = to; i >= 0; i--)
 #define FOR(it,c) for ( __typeof((c).begin()) it=(c).begin(); it!=(c).end(); it++ )
+#define FORR(it,c) for ( __typeof((c).rbegin()) it=(c).rbegin(); it!=(c).rend(); it++ )
 template<class T> std::string toStr(T t);
  
 using namespace std;
