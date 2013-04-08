@@ -19,6 +19,10 @@
 typedef long long LL;
 typedef std::vector<int> VI ;
 typedef std::vector<LL> VL ;
+typedef std::pair<int, int> PII;
+typedef std::pair<LL, LL> PLL;
+typedef std::vector<PII> VPII;
+typedef std::vector<PLL> VPLL;
 template<class T> const T& min(const T& a, const T& b, const T& c) { return min(a, min(b, c));}
 template<class T> const T& max(const T& a, const T& b, const T& c) { return max(a, max(b, c)); }
 template<class T> std::string toStr(T t);
