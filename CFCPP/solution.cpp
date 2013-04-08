@@ -17,6 +17,8 @@
 #define FORR(it,c) for ( __typeof((c).rbegin()) it=(c).rbegin(); it!=(c).rend(); it++ )
 #define ZERO(a) memset((a), 0, sizeof(a))
 typedef long long LL;
+typedef std::vector<int> VI ;
+typedef std::vector<LL> VL ;
 template<class T> const T& min(const T& a, const T& b, const T& c) { return min(a, min(b, c));}
 template<class T> const T& max(const T& a, const T& b, const T& c) { return max(a, max(b, c)); }
 template<class T> std::string toStr(T t);
