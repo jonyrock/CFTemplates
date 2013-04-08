@@ -19,3 +19,9 @@ T gcd(T a, T b) {
         a = a % b;
     }
 }
+
+template<class T>
+T lcm(T a, T b) {
+    T g = gcd(a, b);
+    return (a / g) * b;
+}
