@@ -29,8 +29,8 @@ private:
 public:
 
     Graph(size_t prelim_size = 15):inReversedSide(true) {
-        edges.reserve(prelim_size);
-        redges.reserve(prelim_size);
+        edges.resize(prelim_size + 1);
+        redges.resize(prelim_size + 1);
     }
 
     void addEdge(size_t from, size_t to) {
