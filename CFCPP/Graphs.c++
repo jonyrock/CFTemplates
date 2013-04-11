@@ -83,26 +83,26 @@ public:
 
     }
     
-    vector<size_t> parent;
-    size_t getParent(size_t vertex){
-        if(parent.at(vertex) == vertex) return vertex;
-        return parent[vertex] = getParent(parent[vertex]);
+    vector<size_t> dsuParent;
+    size_t getDsuParent(size_t vertex){
+        if(dsuParent.at(vertex) == vertex) return vertex;
+        return dsuParent[vertex] = getDsuParent(dsuParent[vertex]);
     }
-    void buildSNP() {
+    void buildDsu() {
         parent.resize(edges.size());
         for(size_t i = 0; i < edges.size(); i++){
             parent.at(i) = i;
         }
         for(vector<vset>::iterator it = edges.begin(); it != edges.end(); it++){
             for(vset::iterator jt = it->begin(); jt != it->end(); jt++){
-                // v -- > u
+                // v --> u
                 size_t v = it - edges.begin();
                 size_t u = *jt;
                 if(u==v) continue;
-                parent[getParent(v)] = getParent(u);
+                dsuParent[getDsuParent(v)] = getDsuParent(u);
             }
         }
-        for(size_t i = 0; i < parent.size(); i++) getParent(i);
+        for(size_t i = 0; i < parent.size(); i++) getDsuParent(i);
     }
 
 };
