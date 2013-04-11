@@ -11,8 +11,6 @@ using namespace std;
 // 1 - first node
 
 class Graph {
-#define REP(i, to) for(__typeof(to) i = 0; i < to; i++) // i <3 it 
-#define FOR(it,c) for ( __typeof((c).begin()) it=(c).begin(); it!=(c).end(); it++ ) // i <3 it too!
 
 public:
     typedef vector<size_t> vset;
@@ -31,7 +29,7 @@ public:
     }
 
     void addEdge(size_t from, size_t to) {
-        if (edges.size() <= max(from, to)) {
+        if (edges.size() <= max(from, to) + 1) {
             edges.resize(max(from, to) + 1);
             redges.resize(max(from, to) + 1);
         }
@@ -65,21 +63,25 @@ public:
     void dfs(size_t from, vector<size_t> connected) {
         lastDfsVisited.resize(edges.size());
         stack<size_t> unexplored;
+        unexplored.push(from);
         while (!unexplored.empty()) {
             size_t current = unexplored.top();
             connected.push_back(current);
             unexplored.pop();
             const vset& friends = friendsFrom(current);
 
-            FOR(it, friends) {
-                if (lastDfsVisited[*it]) continue;
-                lastDfsVisited[*it] = true;
-                unexplored.push(*it);
+            REP(i, friends.size()){
+                size_t v = friends.at(i);
+                if (lastDfsVisited[v]) continue;
+                lastDfsVisited[v] = true;
+                unexplored.push(v);
             }
         }
         
-        FOR(it, connected) lastDfsVisited[*it] = false;
+        REP(i, connected.size()) lastDfsVisited.at(connected.at(i)) = false;
 
     }
 
 };
+
+
