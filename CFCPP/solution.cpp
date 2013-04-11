@@ -9,6 +9,7 @@
 #include <map>
 #include <set>
 #include <math.h>
+#include <stack>
 #include <sstream>
 
 #define REP(i, to) for(__typeof(to) i = 0; i < to; i++)
