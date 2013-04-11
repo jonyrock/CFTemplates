@@ -59,12 +59,13 @@ public:
             return redges.at(to);
     }
     
-    void dfs(size_t from, vector<size_t> connected) {
+    void dfs(size_t from, vector<size_t>& connected) {
         lastDfsVisited.resize(edges.size());
         stack<size_t> unexplored;
         unexplored.push(from);
         while (!unexplored.empty()) {
             size_t current = unexplored.top();
+            if(lastDfsVisited.at(current)){ unexplored.pop(); continue; }
             connected.push_back(current);
             unexplored.pop();
             const vset& friends = friendsFrom(current);
@@ -77,7 +78,7 @@ public:
             }
         }
         
-        REP(i, connected.size()) lastDfsVisited.at(connected.at(i)) = false;
+        REP(i, connected.size()) lastDfsVisited.at(connected.at(i)) = false; // remove if visits unique
 
     }
 
