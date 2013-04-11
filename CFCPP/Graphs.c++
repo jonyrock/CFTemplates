@@ -61,11 +61,11 @@ public:
     
     void dfs(size_t from, vector<size_t>& connected) {
         lastDfsVisited.resize(edges.size());
+        if(lastDfsVisited.at(from)) return;
         stack<size_t> unexplored;
         unexplored.push(from);
         while (!unexplored.empty()) {
             size_t current = unexplored.top();
-            if(lastDfsVisited.at(current)){ unexplored.pop(); continue; }
             lastDfsVisited[current] = true;
             connected.push_back(current);
             unexplored.pop();
