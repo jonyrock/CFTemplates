@@ -66,6 +66,7 @@ public:
         while (!unexplored.empty()) {
             size_t current = unexplored.top();
             if(lastDfsVisited.at(current)){ unexplored.pop(); continue; }
+            lastDfsVisited[current] = true;
             connected.push_back(current);
             unexplored.pop();
             const vset& friends = friendsFrom(current);
