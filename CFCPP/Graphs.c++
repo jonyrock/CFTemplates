@@ -8,8 +8,6 @@
 
 using namespace std;
 
-// 1 - first node
-
 class Graph {
 
 public:
@@ -21,18 +19,22 @@ private:
     bool inReversedSide;
     vector<bool> lastDfsVisited;
     
+    void checkVertexesRanges(size_t vetrtexIndex){
+        if (edges.size() <= vetrtexIndex + 1) {
+            edges.resize(vetrtexIndex + 1);
+            redges.resize(vetrtexIndex + 1);
+        }
+    }
+
 public:
 
-    Graph(size_t prelim_size = 16):inReversedSide(false) {
+    Graph(size_t prelim_size = 15):inReversedSide(true) {
         edges.reserve(prelim_size);
         redges.reserve(prelim_size);
     }
 
     void addEdge(size_t from, size_t to) {
-        if (edges.size() <= max(from, to) + 1) {
-            edges.resize(max(from, to) + 1);
-            redges.resize(max(from, to) + 1);
-        }
+        checkVertexesRanges(max(from, to));
         edges.at(from).push_back(to);
         redges.at(to).push_back(from);
     }
@@ -41,24 +43,21 @@ public:
         inReversedSide = !inReversedSide;
     }
 
-    const vset& friendsFrom(size_t from) const {
+    const vset& friendsFrom(size_t from) {
+        checkVertexesRanges(from);
         if (inReversedSide)
             return edges.at(from);
         else
             return redges.at(from);
     }
 
-    const vset& friendsTo(size_t from) const {
+    const vset& friendsTo(size_t to) {
+        checkVertexesRanges(to);
         if (!inReversedSide)
-            return edges.at(from);
+            return edges.at(to);
         else
-            return redges.at(from);
+            return redges.at(to);
     }
-
-//    vector<vset> findComponent() {
-//        
-//    }
-//    
     
     void dfs(size_t from, vector<size_t> connected) {
         lastDfsVisited.resize(edges.size());
