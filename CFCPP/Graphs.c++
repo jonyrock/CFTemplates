@@ -82,6 +82,28 @@ public:
         REP(i, connected.size()) lastDfsVisited.at(connected.at(i)) = false; // remove if visits unique
 
     }
+    
+    vector<size_t> parent;
+    size_t getParent(size_t vertex){
+        if(parent.at(vertex) == vertex) return vertex;
+        return parent[vertex] = getParent(parent[vertex]);
+    }
+    void buildSNP() {
+        parent.resize(edges.size());
+        for(size_t i = 0; i < edges.size(); i++){
+            parent.at(i) = i;
+        }
+        for(vector<vset>::iterator it = edges.begin(); it != edges.end(); it++){
+            for(vset::iterator jt = it->begin(); jt != it->end(); jt++){
+                // v -- > u
+                size_t v = it - edges.begin();
+                size_t u = *jt;
+                if(u==v) continue;
+                parent[getParent(v)] = getParent(u);
+            }
+        }
+        for(size_t i = 0; i < parent.size(); i++) getParent(i);
+    }
 
 };
 
